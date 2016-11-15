@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="entities.HistoryEntity" table="HISTORY" schema="SYSTEM">
+        <id name="eventid">
+            <column name="EVENTID" sql-type="number(*)" precision="2147483646"/>
+        </id>
+        <property name="datetaken">
+            <column name="DATETAKEN" sql-type="date"/>
+        </property>
+        <property name="returnto">
+            <column name="RETURNTO" sql-type="date"/>
+        </property>
+        <property name="isreturned">
+            <column name="ISRETURNED" sql-type="number(*)" precision="2147483646"/>
+        </property>
+    </class>
+</hibernate-mapping>
