@@ -39,6 +39,7 @@ public class Main {
         System.out.println("testing hiber");
         Locale.setDefault(Locale.ENGLISH);
         Session sess = HiberSF.getSessionFactory().openSession();
+
         sess.close();
         exit(-1);
 
