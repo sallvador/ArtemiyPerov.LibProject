@@ -6,6 +6,25 @@ package classes.entities;
 public class AuthorsEntity {
     private long authorid;
     private String authorname;
+    static long lastID = 0;
+    protected AuthorsEntity(){
+
+    }
+
+    public AuthorsEntity(String name){
+        name = name.trim().replaceAll("[\\s]{2,}", " ");
+        if (name.length() > 30){
+            System.out.println("Name must be not longer than 30 characters");
+            return;
+        }
+        this.authorname = name;
+        this.authorid = lastID + 1;
+        lastID = this.authorid;
+        if (lastID == Long.MAX_VALUE){
+            //will be supported later
+        }
+
+    }
 
     public long getAuthorid() {
         return authorid;

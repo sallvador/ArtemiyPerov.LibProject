@@ -34,11 +34,12 @@ public class AuthorsManager extends AuthorsDao {
     public void addByName(String name) {
         if (name.length() > 30) {
             System.out.println("Name length must be not more than 30 characters");
+            return;
         }
         else {
             Session sess = startSessAndTransaction();
-            AuthorsEntity ent = new AuthorsEntity();
-            ent.setAuthorname(name);
+            AuthorsEntity ent = new AuthorsEntity(name);
+            saveChanges(sess);
         }
     }
 
@@ -46,14 +47,26 @@ public class AuthorsManager extends AuthorsDao {
         Session sess = startSessAndTransaction();
         List<AuthorsEntity> result = new ArrayList<AuthorsEntity>();
         List<AuthorsEntity> authors = sess.createQuery("from AuthorsEntity order by id").list();
+        name = name.trim().replaceAll("[\\s]{2,}", " ");
+        String[] patterns = name.split(" ");
         for (AuthorsEntity auth : authors){
-            if (auth.getAuthorname().contains(name))
+            boolean matches = true;
+            int index = 0;
+            while ((matches == true)&&(index<patterns.length)){
+                matches = auth.getAuthorname().contains(patterns[index]);
+                index++;
+            }
+            if (matches == true)
                 result.add(auth);
         }
+        saveChanges(sess);
         return result;
     }
+
     public AuthorsEntity searchById(long id){
         Session sess = startSessAndTransaction();
-        return (AuthorsEntity) sess.createQuery("from AuthorsEntity where (id = "+(new Long(id)).toString()+")").uniqueResult();
+        AuthorsEntity result = (AuthorsEntity) sess.createQuery("from AuthorsEntity where (id = "+(new Long(id)).toString()+")").uniqueResult();
+        saveChanges(sess);
+        return result;
     }
 }
