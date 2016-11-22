@@ -41,7 +41,7 @@ public class UsersManager extends UsersDao{
             return null;
         }
         Session sess = startSessAndTransaction();
-        result = (UsersEntity) sess.createQuery("from UsersEntity where (email = " + email + ")").uniqueResult();
+        result = (UsersEntity) sess.createQuery("from UsersEntity where (email = '" + email + "')").uniqueResult();
         saveChanges(sess);
         return result;
     }

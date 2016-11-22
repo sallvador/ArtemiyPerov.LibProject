@@ -22,4 +22,8 @@ public class HiberSF {
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+
+    public static void killSF(){
+        sessionFactory.close();
+    }
 }

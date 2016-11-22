@@ -14,5 +14,8 @@
         <property name="istaken">
             <column name="ISTAKEN" sql-type="number(*)" precision="2147483646"/>
         </property>
+        <property name="authorid">
+            <column name="AUTHORID" sql-type="number(*)" precision="2147483646"/>
+        </property>
     </class>
 </hibernate-mapping>

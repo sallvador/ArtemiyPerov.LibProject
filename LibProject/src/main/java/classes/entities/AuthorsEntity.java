@@ -1,5 +1,7 @@
 package classes.entities;
 
+import java.util.NoSuchElementException;
+
 /**
  * Created by demon on 15.11.2016.
  */
@@ -12,6 +14,7 @@ public class AuthorsEntity {
     }
 
     public AuthorsEntity(String name){
+        if (name == null) throw new NoSuchElementException();
         name = name.trim().replaceAll("[\\s]{2,}", " ");
         if (name.length() > 30){
             System.out.println("Name must be not longer than 30 characters");

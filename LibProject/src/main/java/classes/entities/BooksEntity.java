@@ -7,6 +7,21 @@ public class BooksEntity {
     private long bookid;
     private String bookname;
     private long istaken;
+    private long authorid;
+
+    public long getAuthorid() {
+        return authorid;
+    }
+
+    public void setAuthorid(long authorid) {
+        this.authorid = authorid;
+    }
+
+    protected BooksEntity(){
+
+    }
+
+    //public BooksEntity(String name, )
 
     public long getBookid() {
         return bookid;

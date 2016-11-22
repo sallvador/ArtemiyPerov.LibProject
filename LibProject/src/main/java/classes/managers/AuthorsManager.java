@@ -11,7 +11,6 @@ import java.util.List;
  * Created by demon on 16.11.2016.
  */
 public class AuthorsManager extends AuthorsDao {
-    static long lastID = 0;
 
     public void addByObject(AuthorsEntity auth) {
         Session sess = startSessAndTransaction();

@@ -1,6 +1,7 @@
 package classes.entities;
 
 import java.sql.Time;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,7 @@ public class UsersEntity {
     }
 
     public UsersEntity(String firstname, String lastname, String email){
+        if ((firstname == null) || (lastname == null) || (email == null))  throw new NoSuchElementException();
         firstname = firstname.trim().replaceAll("[\\s]{2,}", " ");
         lastname = lastname.trim().replaceAll("[\\s]{2,}", " ");
         email = email.trim();
@@ -47,6 +49,7 @@ public class UsersEntity {
     }
 
     public UsersEntity(String firstname, String lastname, String email, String phone){
+        if ((firstname == null) || (lastname == null) || (email == null) || (phone == null))  throw new NoSuchElementException();
         firstname = firstname.trim().replaceAll("[\\s]{2,}", " ");
         lastname = lastname.trim().replaceAll("[\\s]{2,}", " ");
         email = email.trim();
