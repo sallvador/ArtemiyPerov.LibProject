@@ -1,13 +1,48 @@
 package classes.entities;
 
+import classes.util.HiberSF;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 /**
  * Created by demon on 15.11.2016.
  */
 public class BooksEntity {
+    private static long lastID;
+    static {
+        try{
+            SessionFactory sf = HiberSF.getSessionFactory();
+            Session session = sf.openSession();
+            session.beginTransaction();
+            Query query = session.createQuery("select max(id) from BooksEntity ");
+            lastID = new Long(query.uniqueResult().toString());
+            session.getTransaction().commit();
+            session.close();
+            sf.close();
+        }catch (Exception e) {
+            System.err.println("Failed to get books id" + e);
+            throw new ExceptionInInitializerError(e);
+        }
+    }
     private long bookid;
     private String bookname;
-    private long istaken;
+    private long istaken = 0;
     private long authorid;
+
+    protected BooksEntity(){
+
+    }
+
+    public BooksEntity(String bookname, String authorname){
+        this.bookid = lastID + 1;
+        this.bookname = bookname;
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        Query query = session.createQuery("from AuthorsEntity where authorname = :authorname").setString("authorname", authorname);
+        AuthorsEntity author = (AuthorsEntity) query.uniqueResult();
+        this.authorid = author.getAuthorid();
+    }
 
     public long getAuthorid() {
         return authorid;
@@ -15,10 +50,6 @@ public class BooksEntity {
 
     public void setAuthorid(long authorid) {
         this.authorid = authorid;
-    }
-
-    protected BooksEntity(){
-
     }
 
     //public BooksEntity(String name, )

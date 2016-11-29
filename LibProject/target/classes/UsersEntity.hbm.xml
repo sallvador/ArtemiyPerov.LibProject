@@ -21,10 +21,13 @@
             <column name="EMAIL" sql-type="varchar2(30)" length="30"/>
         </property>
         <property name="phone">
-            <column name="PHONE" sql-type="varchar2(20)" length="20" not-null="true"/>
+            <column name="PHONE" sql-type="varchar2(20)" length="20" not-null="false"/>
         </property>
         <property name="category">
             <column name="CATEGORY" sql-type="varchar2(1)" length="1"/>
+        </property>
+        <property name="password">
+            <column name="PASSWORD" sql-type="varchar2(20)" length="20"/>
         </property>
     </class>
 </hibernate-mapping>

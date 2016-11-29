@@ -1,0 +1,166 @@
+Nov 29, 2016 8:09:42 PM org.hibernate.annotations.common.reflection.java.JavaReflectionManager <clinit>
+INFO: HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+Nov 29, 2016 8:09:42 PM org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate Core {4.3.2.Final}
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Environment <clinit>
+INFO: HHH000206: hibernate.properties not found
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Environment buildBytecodeProvider
+INFO: HHH000021: Bytecode provider name : javassist
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Configuration configure
+INFO: HHH000043: Configuring from resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Configuration getConfigurationInputStream
+INFO: HHH000040: Configuration resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: UsersEntity.hbm.xml
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: HistoryEntity.hbm.xml
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: AuthorsEntity.hbm.xml
+Nov 29, 2016 8:09:42 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: BooksEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration doConfigure
+INFO: HHH000041: Configured SessionFactory: null
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH000402: Using Hibernate built-in connection pool (not for production use!)
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000401: using driver [oracle.jdbc.driver.OracleDriver] at URL [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000046: Connection properties: {user=system, password=****}
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000006: Autocommit mode: false
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+INFO: HHH000115: Hibernate connection pool size: 20 (min=1)
+Nov 29, 2016 8:09:43 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.transaction.internal.TransactionFactoryInitiator initiateService
+INFO: HHH000399: Using default transaction strategy (direct JDBC transactions)
+Nov 29, 2016 8:09:43 PM org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory <init>
+INFO: HHH000397: Using ASTQueryTranslatorFactory
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration configure
+INFO: HHH000043: Configuring from resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration getConfigurationInputStream
+INFO: HHH000040: Configuration resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: UsersEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: HistoryEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: AuthorsEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: BooksEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration doConfigure
+INFO: HHH000041: Configured SessionFactory: null
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH000402: Using Hibernate built-in connection pool (not for production use!)
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000401: using driver [oracle.jdbc.driver.OracleDriver] at URL [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000046: Connection properties: {user=system, password=****}
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000006: Autocommit mode: false
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+INFO: HHH000115: Hibernate connection pool size: 20 (min=1)
+Nov 29, 2016 8:09:43 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.transaction.internal.TransactionFactoryInitiator initiateService
+INFO: HHH000399: Using default transaction strategy (direct JDBC transactions)
+Nov 29, 2016 8:09:43 PM org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory <init>
+INFO: HHH000397: Using ASTQueryTranslatorFactory
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration configure
+INFO: HHH000043: Configuring from resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration getConfigurationInputStream
+INFO: HHH000040: Configuration resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: UsersEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: HistoryEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: AuthorsEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: BooksEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration doConfigure
+INFO: HHH000041: Configured SessionFactory: null
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH000402: Using Hibernate built-in connection pool (not for production use!)
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000401: using driver [oracle.jdbc.driver.OracleDriver] at URL [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000046: Connection properties: {user=system, password=****}
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000006: Autocommit mode: false
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+INFO: HHH000115: Hibernate connection pool size: 20 (min=1)
+Nov 29, 2016 8:09:43 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+Nov 29, 2016 8:09:43 PM org.hibernate.engine.transaction.internal.TransactionFactoryInitiator initiateService
+INFO: HHH000399: Using default transaction strategy (direct JDBC transactions)
+Nov 29, 2016 8:09:43 PM org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory <init>
+INFO: HHH000397: Using ASTQueryTranslatorFactory
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration configure
+INFO: HHH000043: Configuring from resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration getConfigurationInputStream
+INFO: HHH000040: Configuration resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: UsersEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: HistoryEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: AuthorsEntity.hbm.xml
+Nov 29, 2016 8:09:43 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: BooksEntity.hbm.xml
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration doConfigure
+INFO: HHH000041: Configured SessionFactory: null
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH000402: Using Hibernate built-in connection pool (not for production use!)
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000401: using driver [oracle.jdbc.driver.OracleDriver] at URL [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000046: Connection properties: {user=system, password=****}
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000006: Autocommit mode: false
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+INFO: HHH000115: Hibernate connection pool size: 20 (min=1)
+Nov 29, 2016 8:09:44 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.transaction.internal.TransactionFactoryInitiator initiateService
+INFO: HHH000399: Using default transaction strategy (direct JDBC transactions)
+Nov 29, 2016 8:09:44 PM org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory <init>
+INFO: HHH000397: Using ASTQueryTranslatorFactory
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration configure
+INFO: HHH000043: Configuring from resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration getConfigurationInputStream
+INFO: HHH000040: Configuration resource: /hibernate.cfg.xml
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: UsersEntity.hbm.xml
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: HistoryEntity.hbm.xml
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: AuthorsEntity.hbm.xml
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration addResource
+INFO: HHH000221: Reading mappings from resource: BooksEntity.hbm.xml
+Nov 29, 2016 8:09:44 PM org.hibernate.cfg.Configuration doConfigure
+INFO: HHH000041: Configured SessionFactory: null
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH000402: Using Hibernate built-in connection pool (not for production use!)
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000401: using driver [oracle.jdbc.driver.OracleDriver] at URL [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000046: Connection properties: {user=system, password=****}
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH000006: Autocommit mode: false
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+INFO: HHH000115: Hibernate connection pool size: 20 (min=1)
+Nov 29, 2016 8:09:44 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.transaction.internal.TransactionFactoryInitiator initiateService
+INFO: HHH000399: Using default transaction strategy (direct JDBC transactions)
+Nov 29, 2016 8:09:44 PM org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory <init>
+INFO: HHH000397: Using ASTQueryTranslatorFactory
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH000030: Cleaning up connection pool [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH000030: Cleaning up connection pool [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH000030: Cleaning up connection pool [jdbc:oracle:thin:@localhost:1521:XE]
+Nov 29, 2016 8:09:44 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH000030: Cleaning up connection pool [jdbc:oracle:thin:@localhost:1521:XE]

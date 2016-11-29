@@ -7,15 +7,16 @@ import classes.util.HiberSF;
  * Created by demon on 16.11.2016.
  */
 public abstract class Dao {
-    static protected Session startSessAndTransaction(){
-        Session sess = HiberSF.getSessionFactory().openSession();
-        sess.beginTransaction();
-        return sess;
+    static protected Session GetSessionWithTransaction(){
+        Session session = HiberSF.getSessionFactory().openSession();
+        session.flush();
+        session.beginTransaction();
+        return session;
     }
 
-    static protected void saveChanges(Session sess){
-        sess.flush();
-        sess.getTransaction().commit();
-        sess.close();
+    static protected void CommitTransactionCloseSession(Session session){
+        session.flush();
+        session.getTransaction().commit();
+        session.close();
     }
 }

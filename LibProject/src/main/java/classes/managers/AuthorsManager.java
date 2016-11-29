@@ -1,10 +1,11 @@
 package classes.managers;
 
 import classes.entities.AuthorsEntity;
+import classes.util.Assistant;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 
 /**
@@ -13,40 +14,41 @@ import java.util.List;
 public class AuthorsManager extends AuthorsDao {
 
     public void addByObject(AuthorsEntity auth) {
-        Session sess = startSessAndTransaction();
-        sess.save(auth);
-        saveChanges(sess);
+        Session session = GetSessionWithTransaction();
+        session.save(auth);
+        CommitTransactionCloseSession(session);
     }
 
     public void removeByObject(AuthorsEntity auth) {
-        Session sess = startSessAndTransaction();
-        sess.delete(auth);
-        saveChanges(sess);
+        Session session = GetSessionWithTransaction();
+        session.delete(auth);
+        CommitTransactionCloseSession(session);
     }
 
     public void mergeByObject(AuthorsEntity auth) {
-        Session sess = startSessAndTransaction();
-        sess.merge(auth);
-        saveChanges(sess);
+        Session session = GetSessionWithTransaction();
+        session.merge(auth);
+        CommitTransactionCloseSession(session);
     }
 
     public void addByName(String name) {
-        if (name.length() > 30) {
+        if (name.length() > Assistant.maxTextLength) {
             System.out.println("Name length must be not more than 30 characters");
             return;
         }
         else {
-            Session sess = startSessAndTransaction();
+            Session session = GetSessionWithTransaction();
             AuthorsEntity ent = new AuthorsEntity(name);
-            saveChanges(sess);
+            CommitTransactionCloseSession(session);
         }
     }
 
-    public List<AuthorsEntity> searchByName(String name){
-        Session sess = startSessAndTransaction();
-        List<AuthorsEntity> result = new ArrayList<AuthorsEntity>();
-        List<AuthorsEntity> authors = sess.createQuery("from AuthorsEntity order by id").list();
-        name = name.trim().replaceAll("[\\s]{2,}", " ");
+    public List<AuthorsEntity> GetAuthorsByName(String name){
+        Session session = GetSessionWithTransaction();
+        List<AuthorsEntity> Authors = new ArrayList<AuthorsEntity>();
+        Query query = session.createQuery("from AuthorsEntity order by id");
+        List<AuthorsEntity> authors = query.list();
+        name = Assistant.deleteNeedlessSpaces(name);
         String[] patterns = name.split(" ");
         for (AuthorsEntity auth : authors){
             boolean matches = true;
@@ -56,16 +58,17 @@ public class AuthorsManager extends AuthorsDao {
                 index++;
             }
             if (matches == true)
-                result.add(auth);
+                Authors.add(auth);
         }
-        saveChanges(sess);
-        return result;
+        CommitTransactionCloseSession(session);
+        return Authors;
     }
 
-    public AuthorsEntity searchById(long id){
-        Session sess = startSessAndTransaction();
-        AuthorsEntity result = (AuthorsEntity) sess.createQuery("from AuthorsEntity where (id = "+(new Long(id)).toString()+")").uniqueResult();
-        saveChanges(sess);
-        return result;
+    public AuthorsEntity GetAuthorById(long id){
+        Session session = GetSessionWithTransaction();
+        Query query = session.createQuery("from AuthorsEntity where (id = :givenId)").setLong("givenId", id);
+        AuthorsEntity Author = (AuthorsEntity) query.uniqueResult();
+        CommitTransactionCloseSession(session);
+        return Author;
     }
 }

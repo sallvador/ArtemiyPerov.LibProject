@@ -7,23 +7,20 @@ import org.hibernate.cfg.Configuration;
  * Created by demon on 15.11.2016.
  */
 public class HiberSF {
-    private static final SessionFactory sessionFactory;
-    static {
+    public static SessionFactory getSessionFactory() {
+        SessionFactory sessionFactory = null;
         try {
             sessionFactory = new Configuration().configure()
                     .buildSessionFactory();
-            System.out.printf("Success");
 
         } catch (Exception e) {
             System.err.println("Initial SessionFactory creation failed. " + e);
             throw new ExceptionInInitializerError(e);
         }
-    }
-    public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    public static void killSF(){
+    public static void killSF(SessionFactory sessionFactory){
         sessionFactory.close();
     }
 }
