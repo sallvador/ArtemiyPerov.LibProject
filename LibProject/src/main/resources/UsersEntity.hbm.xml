@@ -6,7 +6,8 @@
 
     <class name="classes.entities.UsersEntity" table="USERS" schema="SYSTEM">
         <id name="userid">
-            <column name="USERID" sql-type="number(*)" precision="2147483646"/>
+            <column name="USERID" sql-type="number(*)" precision="2147483646" not-null="true"/>
+            <generator class="increment"/>
         </id>
         <property name="firstname">
             <column name="FIRSTNAME" sql-type="varchar2(20)" length="20"/>

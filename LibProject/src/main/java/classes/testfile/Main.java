@@ -35,13 +35,10 @@ public class Main {
         }*/
 /*
         UsersEntity newuser = new UsersEntity("Roman", "Orlov", "rorlov@gmail.com");*/
-        List<BooksEntity> books = (new BooksManager()).getBooksByPattern("one two author");
-        for (BooksEntity book: books){
-            System.out.println(book.getBookname());
-        }
 
 
-        //libTerminal.startTerminal();
+
+        libTerminal.startTerminal();
 
     }
 }

@@ -3,9 +3,14 @@ package classes.entities;
 
 import classes.util.Assistant;
 import classes.util.HiberSF;
+import com.sun.istack.internal.NotNull;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.TableGenerator;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Calendar;
@@ -32,6 +37,7 @@ public class UsersEntity {
             throw new ExceptionInInitializerError(e);
         }
     }
+
     private long userid;
     private String firstname;
     private String lastname;
@@ -58,7 +64,7 @@ public class UsersEntity {
         }
         this.firstname = firstname;
         this.lastname = lastname;
-        this.userid = lastID + 1;
+        //this.userid = lastID + 1;
         this.email = email;
         this.password = password;
         lastID = this.getUserid();
@@ -85,7 +91,7 @@ public class UsersEntity {
         }
         this.firstname = firstname;
         this.lastname = lastname;
-        this.userid = lastID + 1;
+        //this.userid = lastID + 1;
         lastID = this.getUserid();
         if (lastID == Long.MAX_VALUE){
             //will be supported later
