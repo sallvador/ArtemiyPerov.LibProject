@@ -16,10 +16,9 @@ import org.hibernate.cfg.Configuration;
 
 import java.awt.print.Book;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,15 +29,7 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(final String[] args) throws Exception {
-        /*List<HistoryEntity> result = (new HistoryManager()).searchHistoryByUsersId(7);
-        SessionFactory sf = HiberSF.getSessionFactory();
-        Session session = sf.openSession();
-        Query query = session.createQuery("from BooksEntity where bookid = :bookid");
-        for (HistoryEntity hUnit: result){
-            query = query.setLong("bookid", hUnit.getBookid());
-            BooksEntity book = (BooksEntity) query.uniqueResult();
-            System.out.println(book.getBookname());
-        }*/
+
 
         libTerminal.startTerminal();
 

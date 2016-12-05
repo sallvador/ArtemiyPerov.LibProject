@@ -13,8 +13,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 /**
@@ -295,7 +298,7 @@ public class libTerminal {
 
     private static void showTakenBooks() {
         List<HistoryEntity> history = (new HistoryManager()).searchHistoryByUsersId(currUser.getUserid());
-        if (history == null)
+        if (history.isEmpty())
             System.out.println("you have no books taken");
         else {
             SessionFactory sf = HiberSF.getSessionFactory();
@@ -321,6 +324,197 @@ public class libTerminal {
 
     private static void bookAbook() {
         //TODO this method
+        byte criteriontype = 0;
+        boolean gotcriterion = false;
+        while(!gotcriterion){
+            System.out.println(Assistant.bookSearchMessage);
+            String criterion = null;
+            try {
+                criterion = br.readLine().trim();
+            } catch (IOException e) {
+                System.err.println("Failed to read the command in book search");
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            if (criterion == null)
+                throw new NullPointerException("No command in book searching");
+            if (criterion.toLowerCase().contentEquals("exit"))
+                gotcriterion = true;
+            else if (criterion.toLowerCase().contentEquals("author")) {
+                criteriontype = Assistant.AUTHORCRITERION;
+                gotcriterion = true;
+            }
+            else if (criterion.toLowerCase().contentEquals("book name")) {
+                criteriontype = Assistant.BOOKNAMECRITERION;
+                gotcriterion = true;
+            }
+            else if (criterion.toLowerCase().contentEquals("collocation")) {
+                criteriontype = Assistant.COLLOCATIONCRITERION;
+                gotcriterion = true;
+            }
+            else
+                System.out.println("Incorrect criterion");
+        }
+        //user entered criterion type
+        if (criteriontype == 0){
+            return;
+        }
+        System.out.println("Enter the line");
+        String line = null;
+        try {
+            line = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the line for book searh");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (line == null)
+            throw new NullPointerException("No line in book searching");
+        if (line.toLowerCase().contentEquals("exit"))
+            return;
+        List<BooksEntity> books = getBooksByLineAndCrType(line, criteriontype);
+        if (books.isEmpty())
+            return;
+        Map<Integer,BooksEntity> booksmap = new HashMap<Integer, BooksEntity>();
+        Integer rownum = 0;
+        for (BooksEntity book: books){
+            rownum++;
+            booksmap.put(rownum, book);
+        }
+        printSearchedBooks(booksmap);
+        if (!bookability(currUser)){
+            System.out.println("You are unable to take more books");
+            return;
+        }
+        boolean posanswer = false;
+        String answer = null;
+        while (!posanswer) {
+            System.out.println("Do you want to book some book? (Yes/No)");
+            try {
+                answer = br.readLine().trim();
+            } catch (IOException e) {
+                System.err.println("Failed to read the answer in book search");
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            if (answer == null)
+                throw new NullPointerException("No answer in book searching");
+            if (answer.toLowerCase().contentEquals("no"))
+                return;
+            else if (answer.toLowerCase().contentEquals("yes"))
+                posanswer = true;
+            else
+                System.out.println("Incorrect command");
+        }
+        if (posanswer)
+            bookbooking(booksmap);
+    }
+
+    private static boolean bookability(UsersEntity user){
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        Query query = session.createQuery("select count(*) from HistoryEntity where userid = :userid and isreturned = 0").setLong("userid", user.getUserid());
+        Long takenbooksnum = (Long) query.uniqueResult();
+        session.close();
+        sf.close();
+        if (takenbooksnum < 3)
+            return true;
+        else
+            return false;
+    }
+
+    // TODO: 05.12.2016
+    private static void bookbooking(Map<Integer,BooksEntity> booksmap){
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        boolean finishedBooking = false;
+        while (!finishedBooking){
+            System.out.println("Type number of book that you want to book");
+            String answer = null;
+            try {
+                answer = br.readLine().trim();
+            } catch (IOException e) {
+                System.err.println("Failed to read book number in book booking");
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            if (answer.toLowerCase().contentEquals("exit"))
+                return;
+            Integer num = null;
+            boolean correctString = true;
+            try{
+                num = new Integer(answer);
+            } catch (NumberFormatException e){
+                System.out.println("Incorrect string");
+                correctString = false;
+            }
+            //User entered a number
+            if (correctString) {
+                if (!booksmap.containsKey(num)) {
+                    System.out.println("Book is not in the list");
+                }
+                //Book is in the list, but may be unavailable
+                else{
+                    BooksEntity book = booksmap.get(num);
+                    if(book.getBalance() == 0)
+                        System.out.println("Book is unavailable now");
+                    //Book can be borrowed
+                    else{
+                        HistoryEntity newHUnit = new HistoryEntity(book.getBookid(), currUser.getUserid());
+                        (new HistoryManager()).addByObject(newHUnit);
+                        System.out.println("Book was booked");
+                        finishedBooking = true;
+                    }
+                }
+            }
+        }
+    }
+
+    private static void printSearchedBooks(Map<Integer,BooksEntity> booksmap){
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        Query query = session.createQuery("from AuthorsEntity where authorid = :authorid");
+        int size = booksmap.size();
+        for (int i = 1; i <= size; i++){
+            System.out.println("Number: " + i);
+            BooksEntity book = booksmap.get(i);
+            System.out.println("Book name: " + book.getBookname());
+            AuthorsEntity author = (AuthorsEntity) query.setLong("authorid", book.getAuthorid()).uniqueResult();
+            System.out.println("Author: " + author.getAuthorname());
+            System.out.print("Available: ");
+            if (book.getBalance() == 0)
+                System.out.println("No");
+            else
+                System.out.println("Yes");
+        }
+        /*for (BooksEntity book: books){
+            System.out.println("Book name: " + book.getBookname());
+            AuthorsEntity author = (AuthorsEntity) query.setLong("authorid", book.getAuthorid()).uniqueResult();
+            System.out.println("Author: " + author.getAuthorname());
+            System.out.print("Available: ");
+            if (book.getBalance() == 0)
+                System.out.println("No");
+            else
+                System.out.println("Yes");
+        }*/
+        session.close();
+        sf.close();
+    }
+
+    private static List<BooksEntity> getBooksByLineAndCrType(String line, byte criteriontype) {
+        List<BooksEntity> books = null;
+        switch (criteriontype){
+            case Assistant.AUTHORCRITERION:
+                books = (new BooksManager()).getBooksByAuthor(line);
+                break;
+            case Assistant.BOOKNAMECRITERION:
+                books = (new BooksManager()).getBooksByName(line);
+                break;
+            default:
+                books = (new BooksManager()).getBooksByPattern(line);
+                break;
+        }
+        return books;
     }
 
     private static void changeUserData() {
@@ -510,6 +704,5 @@ public class libTerminal {
             System.out.println("Name changed!");
         }
     }
-
 
 }

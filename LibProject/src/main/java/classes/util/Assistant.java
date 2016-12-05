@@ -14,6 +14,13 @@ public class Assistant {
 
     public static Pattern phonePattern = Pattern.compile("^[1-9][0-9]{10}$");
 
+    public static String bookSearchMessage = "Enter search criterion: 'author' to search by author, 'book name' -  by book name, or 'collocation' to search books which name and author are similar to this word combination";
+
+    //Types of search criteria in books searching
+    public static final byte AUTHORCRITERION = 1;
+    public static final byte BOOKNAMECRITERION = 2;
+    public static final byte COLLOCATIONCRITERION = 3;
+
     public static int maxTextLength = 30;
 
     public static String deleteNeedlessSpaces(String string){

@@ -1,6 +1,7 @@
 package classes.entities;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 /**
  * Created by demon on 15.11.2016.
@@ -13,6 +14,22 @@ public class HistoryEntity {
     private long isreturned;
     private long Bookid;
     private long Userid;
+
+    public HistoryEntity(){
+
+    }
+
+    public HistoryEntity(long bookid, long userid){
+        this.Bookid = bookid;
+        this.Userid = userid;
+        this.isreturned = 0;
+        Calendar calendar = Calendar.getInstance();
+        int Date = calendar.get(Calendar.DAY_OF_MONTH);
+        int Month = calendar.get(Calendar.MONTH) + 1;
+        int Year = calendar.get(Calendar.YEAR)-1900;
+        this.datetaken = new Date(Year, Month, Date);
+        this.returnto = new Date(Year, Month, Date + 15);
+    }
 
     public long getEventid() {
         return eventid;
