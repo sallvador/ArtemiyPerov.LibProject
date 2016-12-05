@@ -25,7 +25,7 @@ public class HistoryEntity {
         this.isreturned = 0;
         Calendar calendar = Calendar.getInstance();
         int Date = calendar.get(Calendar.DAY_OF_MONTH);
-        int Month = calendar.get(Calendar.MONTH) + 1;
+        int Month = calendar.get(Calendar.MONTH);
         int Year = calendar.get(Calendar.YEAR)-1900;
         this.datetaken = new Date(Year, Month, Date);
         this.returnto = new Date(Year, Month, Date + 15);

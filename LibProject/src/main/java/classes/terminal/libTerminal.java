@@ -4,6 +4,7 @@ import classes.entities.AuthorsEntity;
 import classes.entities.BooksEntity;
 import classes.entities.HistoryEntity;
 import classes.entities.UsersEntity;
+import classes.managers.AuthorsManager;
 import classes.managers.BooksManager;
 import classes.managers.HistoryManager;
 import classes.managers.UsersManager;
@@ -264,8 +265,78 @@ public class libTerminal {
     }
 
     private static void adminInterface() {
-        //TODO realise this function
-        System.out.println("your admin function");
+        boolean gotcommand = false;
+        System.out.println("You logged in like administrator");
+        while(!gotcommand){
+            System.out.println("Enter command");
+            String command = null;
+            try {
+                command = br.readLine().trim();
+            } catch (IOException e){
+                System.err.println("Failed to read the command in ai procedure");
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            if (command == null)
+                throw new NullPointerException("No command in ai");
+            if (command.toLowerCase().contentEquals("exit"))
+                gotcommand = true;
+            else if (command.toLowerCase().contentEquals("write off a book"))
+                 writeOff();
+            else if (command.toLowerCase().contentEquals("remove a book"))
+                ;//TODO removeBook();
+            else if (command.toLowerCase().contentEquals("find a user"))
+                ;//findUser();
+            else
+                System.out.println("Incorrect command");
+        }
+    }
+
+    private static void writeOff() {
+        System.out.println("Enter exact book id");
+        String number = null;
+        try {
+            number = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the book id in writing off");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (number == null)
+            throw new NullPointerException("No book id in writing off");
+        if (number.toLowerCase().contentEquals("exit"))
+            return;
+        Long num = null;
+        try {
+            num = new Long(number);
+        } catch (NumberFormatException e){
+            System.out.println("Incorrect book id");
+            return;
+        }
+        BooksEntity book = (new BooksManager()).getBookById(num);
+        if (book == null){
+            System.out.println("Book not found");
+            return;
+        }
+        if (book.getBalance() == 0){
+            System.out.println("No such books in the stock");
+            return;
+        }
+        AuthorsEntity author = (new AuthorsManager()).GetAuthorById(book.getAuthorid());
+        System.out.println("Type 'yes' if you want to write off one book'"+book.getBookname()+"' by "+author.getAuthorname());
+        String answer = null;
+        try {
+            answer = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the answer in writing off");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (answer.toLowerCase().contentEquals("yes")){
+            book.setBalance(book.getBalance()-1);
+            (new BooksManager()).mergeByObject(book);
+            System.out.println("Book has been written off");
+        }
     }
 
     private static void userInterface() {
@@ -323,7 +394,6 @@ public class libTerminal {
     }
 
     private static void bookAbook() {
-        //TODO this method
         byte criteriontype = 0;
         boolean gotcriterion = false;
         while(!gotcriterion){
@@ -423,7 +493,6 @@ public class libTerminal {
             return false;
     }
 
-    // TODO: 05.12.2016
     private static void bookbooking(Map<Integer,BooksEntity> booksmap){
         SessionFactory sf = HiberSF.getSessionFactory();
         Session session = sf.openSession();
@@ -462,6 +531,8 @@ public class libTerminal {
                     else{
                         HistoryEntity newHUnit = new HistoryEntity(book.getBookid(), currUser.getUserid());
                         (new HistoryManager()).addByObject(newHUnit);
+                        book.setBalance(book.getBalance()-1);
+                        (new BooksManager()).mergeByObject(book);
                         System.out.println("Book was booked");
                         finishedBooking = true;
                     }
