@@ -4,6 +4,7 @@ import classes.entities.AuthorsEntity;
 import classes.entities.BooksEntity;
 import classes.entities.UsersEntity;
 import classes.managers.BooksManager;
+import classes.managers.UsersManager;
 import classes.terminal.libTerminal;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -25,18 +26,21 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(final String[] args) throws Exception {
-        System.out.println("testing hiber");
-        Locale.setDefault(Locale.ENGLISH);
-        /*SessionFactory sf = HiberSF.getSessionFactory();
+        /*Locale.setDefault(Locale.ENGLISH);
+        SessionFactory sf = HiberSF.getSessionFactory();
         Session sess = sf.openSession();
-        List<UsersEntity> result = sess.createQuery("from UsersEntity").list();
-        for (UsersEntity tb : result){
-            System.out.println(tb.getFirstname());
-        }*/
+
+        UsersEntity newuser = new UsersEntity("Romanc", "Orlovc", "rorlovc@gmail.com", "abcd");
+        (new UsersManager()).addByObject(newuser);
+        sess.close();
+        sf.close();*/
 /*
         UsersEntity newuser = new UsersEntity("Roman", "Orlov", "rorlov@gmail.com");*/
 
-
+/*List<UsersEntity> result = sess.createQuery("from UsersEntity").list();
+        for (UsersEntity tb : result){
+            System.out.println(tb.getFirstname());
+        }*/
 
         libTerminal.startTerminal();
 

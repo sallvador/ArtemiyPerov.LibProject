@@ -32,6 +32,21 @@ public class UsersManager extends UsersDao{
         CommitTransactionCloseSession(session);
     }
 
+    public UsersEntity GetUserByPhone(String phone){
+        UsersEntity user = null;
+        Matcher matcher = Assistant.phonePattern.matcher(phone);
+        if (matcher.matches() == false){
+            System.out.println("Wrong email format");
+            return null;
+        }
+        phone = "+" + phone;
+        Session session = GetSessionWithTransaction();
+        Query query = session.createQuery("from UsersEntity where (phone = :phone)").setString("phone", phone);
+        user = (UsersEntity) query.uniqueResult();
+        CommitTransactionCloseSession(session);
+        return user;
+    }
+
     public UsersEntity GetUserByEmail(String email){
         UsersEntity User = null;
         email = email.trim();

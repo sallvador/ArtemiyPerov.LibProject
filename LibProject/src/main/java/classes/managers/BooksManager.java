@@ -36,12 +36,10 @@ public class BooksManager extends BooksDao{
         String[] patterns = pattern.split(" ");
         SessionFactory sf = HiberSF.getSessionFactory();
         Session session = sf.openSession();
-        session.beginTransaction();
         Query query = session.createQuery("select b.id || ',' || b.bookname || ' ' || a.authorname from BooksEntity b, AuthorsEntity a where (b.authorid=a.authorid) and (LOWER(b.bookname || a.authorname) like '%'||:pattern||'%')").setString("pattern", patterns[0].toLowerCase());
         List<String> preResult = query.list();
-        session.getTransaction().commit();
         session.close();
-
+        sf.close();
         for (String string: preResult){
             boolean matches = true;
             if (patterns.length > 1) {

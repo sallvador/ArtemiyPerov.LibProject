@@ -11,8 +11,8 @@
         <property name="bookname">
             <column name="BOOKNAME" sql-type="varchar2(30)" length="30"/>
         </property>
-        <property name="istaken">
-            <column name="ISTAKEN" sql-type="number(*)" precision="2147483646"/>
+        <property name="balance">
+            <column name="BALANCE" sql-type="number(*)" precision="2147483646"/>
         </property>
         <property name="authorid">
             <column name="AUTHORID" sql-type="number(*)" precision="2147483646"/>

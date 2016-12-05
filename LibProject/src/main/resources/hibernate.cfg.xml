@@ -15,9 +15,9 @@
         <mapping class="classes.entities.BooksEntity"/>
         <mapping class="classes.entities.HistoryEntity"/>
         <mapping class="classes.entities.UsersEntity"/>
-        <mapping resource="UsersEntity.hbm.xml"/>
-        <mapping resource="HistoryEntity.hbm.xml"/>
         <mapping resource="AuthorsEntity.hbm.xml"/>
         <mapping resource="BooksEntity.hbm.xml"/>
+        <mapping resource="HistoryEntity.hbm.xml"/>
+        <mapping resource="UsersEntity.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,4 +1,3 @@
-
 package classes.entities;
 
 import classes.util.Assistant;
@@ -7,10 +6,7 @@ import com.sun.istack.internal.NotNull;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.TableGenerator;
+import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Calendar;
@@ -19,25 +15,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by demon on 15.11.2016.
+ * Created by demon on 04.12.2016.
  */
 public class UsersEntity {
-    private static long lastID ;
-    static {
-        try{
-            SessionFactory sf = HiberSF.getSessionFactory();
-            Session session = sf.openSession();
-            session.beginTransaction();
-            lastID = new Long(session.createQuery("select max(id) from UsersEntity").uniqueResult().toString());
-            session.getTransaction().commit();
-            session.close();
-            sf.close();
-        }catch (Exception e) {
-            System.err.println("Failed to get users id" + e);
-            throw new ExceptionInInitializerError(e);
-        }
-    }
-
     private long userid;
     private String firstname;
     private String lastname;
@@ -46,8 +26,6 @@ public class UsersEntity {
     private String phone;
     private String category = "U";
     private String password;
-
-
 
     protected UsersEntity(){
 
@@ -64,13 +42,9 @@ public class UsersEntity {
         }
         this.firstname = firstname;
         this.lastname = lastname;
-        //this.userid = lastID + 1;
         this.email = email;
         this.password = password;
-        lastID = this.getUserid();
-        if (lastID == Long.MAX_VALUE){
-            //will be supported later
-        }
+
         this.regdate = new Date(Calendar.getInstance().getTime().getTime());//Time(Calendar.getInstance().getTime().getTime());
         Matcher matcher = Assistant.emailPattern.matcher(email);
         if (matcher.matches() == false){
@@ -91,11 +65,7 @@ public class UsersEntity {
         }
         this.firstname = firstname;
         this.lastname = lastname;
-        //this.userid = lastID + 1;
-        lastID = this.getUserid();
-        if (lastID == Long.MAX_VALUE){
-            //will be supported later
-        }
+
         this.regdate = new Date(Calendar.getInstance().getTime().getTime());
         Matcher matcher = Assistant.emailPattern.matcher(email);
         if (matcher.matches() == false){
@@ -112,9 +82,6 @@ public class UsersEntity {
         this.password = password;
     }
 
-    public static long getLastID(){ return lastID; }
-
-    private static void setLastID(long lastID){ UsersEntity.lastID = lastID; };
 
     public long getUserid() {
         return userid;

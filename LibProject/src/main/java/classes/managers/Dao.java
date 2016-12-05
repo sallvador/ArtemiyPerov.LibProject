@@ -8,6 +8,7 @@ import classes.util.HiberSF;
  */
 public abstract class Dao {
     static protected Session GetSessionWithTransaction(){
+
         Session session = HiberSF.getSessionFactory().openSession();
         session.flush();
         session.beginTransaction();
