@@ -61,8 +61,15 @@ public class BooksManager extends BooksDao{
             }
 
         }
-
-
         return books;
+    }
+
+    public BooksEntity getBookById(long bookID){
+        BooksEntity book = null;
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        Query query = session.createQuery("from BooksEntity where bookid = :bookid").setLong("bookid", bookID);
+        book = (BooksEntity) query.uniqueResult();
+        return book;
     }
 }

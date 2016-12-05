@@ -2,8 +2,10 @@ package classes.testfile;
 
 import classes.entities.AuthorsEntity;
 import classes.entities.BooksEntity;
+import classes.entities.HistoryEntity;
 import classes.entities.UsersEntity;
 import classes.managers.BooksManager;
+import classes.managers.HistoryManager;
 import classes.managers.UsersManager;
 import classes.terminal.libTerminal;
 import org.hibernate.Query;
@@ -11,6 +13,8 @@ import org.hibernate.Session;
 import classes.util.HiberSF;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+
+import java.awt.print.Book;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -26,20 +30,14 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(final String[] args) throws Exception {
-        /*Locale.setDefault(Locale.ENGLISH);
+        /*List<HistoryEntity> result = (new HistoryManager()).searchHistoryByUsersId(7);
         SessionFactory sf = HiberSF.getSessionFactory();
-        Session sess = sf.openSession();
-
-        UsersEntity newuser = new UsersEntity("Romanc", "Orlovc", "rorlovc@gmail.com", "abcd");
-        (new UsersManager()).addByObject(newuser);
-        sess.close();
-        sf.close();*/
-/*
-        UsersEntity newuser = new UsersEntity("Roman", "Orlov", "rorlov@gmail.com");*/
-
-/*List<UsersEntity> result = sess.createQuery("from UsersEntity").list();
-        for (UsersEntity tb : result){
-            System.out.println(tb.getFirstname());
+        Session session = sf.openSession();
+        Query query = session.createQuery("from BooksEntity where bookid = :bookid");
+        for (HistoryEntity hUnit: result){
+            query = query.setLong("bookid", hUnit.getBookid());
+            BooksEntity book = (BooksEntity) query.uniqueResult();
+            System.out.println(book.getBookname());
         }*/
 
         libTerminal.startTerminal();

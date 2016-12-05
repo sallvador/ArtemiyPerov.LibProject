@@ -7,6 +7,7 @@
     <class name="classes.entities.HistoryEntity" table="HISTORY" schema="SYSTEM">
         <id name="eventid">
             <column name="EVENTID" sql-type="number(*)" precision="2147483646"/>
+            <generator class="increment"></generator>
         </id>
         <property name="datetaken">
             <column name="DATETAKEN" sql-type="date"/>

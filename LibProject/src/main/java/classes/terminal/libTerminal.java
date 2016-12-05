@@ -1,6 +1,11 @@
 package classes.terminal;
 
+import classes.entities.AuthorsEntity;
+import classes.entities.BooksEntity;
+import classes.entities.HistoryEntity;
 import classes.entities.UsersEntity;
+import classes.managers.BooksManager;
+import classes.managers.HistoryManager;
 import classes.managers.UsersManager;
 import classes.util.Assistant;
 import classes.util.HiberSF;
@@ -9,6 +14,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.io.*;
+import java.util.List;
 import java.util.regex.Matcher;
 
 /**
@@ -17,9 +23,9 @@ import java.util.regex.Matcher;
 public class libTerminal {
     static {
         try {
-            System.setErr(new PrintStream(new File("log.txt")));
+            System.setErr(new PrintStream(new File("terminallog.txt")));
         } catch (FileNotFoundException e) {
-            System.out.println("fuck!");
+            System.out.println("Error in creating log file");
         }
     }
     static private UsersEntity currUser;
@@ -288,7 +294,29 @@ public class libTerminal {
     }
 
     private static void showTakenBooks() {
-        //TODO this method
+        List<HistoryEntity> history = (new HistoryManager()).searchHistoryByUsersId(currUser.getUserid());
+        if (history == null)
+            System.out.println("you have no books taken");
+        else {
+            SessionFactory sf = HiberSF.getSessionFactory();
+            Session session = sf.openSession();
+            Query bookQuery = session.createQuery("from BooksEntity where bookid = :bookid");
+            Query authorQuery = session.createQuery("from AuthorsEntity  where authorid = :authorid");
+            for (HistoryEntity hUnit: history){
+                BooksEntity book = (BooksEntity) bookQuery.setLong("bookid", hUnit.getBookid()).uniqueResult();
+                AuthorsEntity author = (AuthorsEntity) authorQuery.setLong("authorid", book.getAuthorid()).uniqueResult();
+                System.out.println("Author: " + author.getAuthorname());
+                System.out.println("Book: " + book.getBookname());
+                System.out.print("Return to: ");
+                if (hUnit.getIsreturned()==1)
+                    System.out.println("returned");
+                else
+                    System.out.println(hUnit.getReturnto());
+                System.out.println();
+            }
+            session.close();
+            sf.close();
+        }
     }
 
     private static void bookAbook() {

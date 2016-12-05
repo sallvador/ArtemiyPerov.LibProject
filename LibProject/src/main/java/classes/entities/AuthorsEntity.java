@@ -12,22 +12,7 @@ import java.util.NoSuchElementException;
  * Created by demon on 15.11.2016.
  */
 public class AuthorsEntity {
-    private static long lastID = 0;
-    static {
-        try{
-            SessionFactory sf = HiberSF.getSessionFactory();
-            Session session = sf.openSession();
-            session.beginTransaction();
-            Query query = session.createQuery("select max(id) from AuthorsEntity ");
-            lastID = new Long(query.uniqueResult().toString());
-            session.getTransaction().commit();
-            session.close();
-            sf.close();
-        }catch (Exception e) {
-            System.err.println("Failed to get authors id" + e);
-            throw new ExceptionInInitializerError(e);
-        }
-    }
+
     private long authorid;
     private String authorname;
     protected AuthorsEntity(){
@@ -42,11 +27,6 @@ public class AuthorsEntity {
             return;
         }
         this.authorname = name;
-        this.authorid = lastID + 1;
-        lastID = this.authorid;
-        if (lastID == Long.MAX_VALUE){
-            //will be supported later
-        }
 
     }
 

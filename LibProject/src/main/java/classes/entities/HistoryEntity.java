@@ -1,35 +1,15 @@
 package classes.entities;
 
-import classes.util.HiberSF;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
-import java.sql.Time;
+import java.sql.Date;
 
 /**
  * Created by demon on 15.11.2016.
  */
 public class HistoryEntity {
-    private static long lastEventID;
-    static {
-        try{
-            SessionFactory sf = HiberSF.getSessionFactory();
-            Session session = sf.openSession();
-            session.beginTransaction();
-            Query query = session.createQuery("select max(id) from HistoryEntity");
-            lastEventID = new Long(query.uniqueResult().toString());
-            session.getTransaction().commit();
-            session.close();
-            sf.close();
-        }catch (Exception e) {
-            System.err.println("Failed to get books id" + e);
-            throw new ExceptionInInitializerError(e);
-        }
-    }
+
     private long eventid;
-    private Time datetaken;
-    private Time returnto;
+    private Date datetaken;
+    private Date returnto;
     private long isreturned;
     private long Bookid;
     private long Userid;
@@ -42,19 +22,19 @@ public class HistoryEntity {
         this.eventid = eventid;
     }
 
-    public Time getDatetaken() {
+    public Date getDatetaken() {
         return datetaken;
     }
 
-    public void setDatetaken(Time datetaken) {
+    public void setDatetaken(Date datetaken) {
         this.datetaken = datetaken;
     }
 
-    public Time getReturnto() {
+    public Date getReturnto() {
         return returnto;
     }
 
-    public void setReturnto(Time returnto) {
+    public void setReturnto(Date returnto) {
         this.returnto = returnto;
     }
 

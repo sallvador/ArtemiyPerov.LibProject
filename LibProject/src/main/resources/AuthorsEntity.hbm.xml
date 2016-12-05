@@ -7,6 +7,7 @@
     <class name="classes.entities.AuthorsEntity" table="AUTHORS" schema="SYSTEM">
         <id name="authorid">
             <column name="AUTHORID" sql-type="number(*)" precision="2147483646"/>
+            <generator class="increment"></generator>
         </id>
         <property name="authorname">
             <column name="AUTHORNAME" sql-type="varchar2(30)" length="30"/>
