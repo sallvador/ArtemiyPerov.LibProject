@@ -9,12 +9,12 @@ import classes.managers.BooksManager;
 import classes.managers.HistoryManager;
 import classes.managers.UsersManager;
 import classes.util.Assistant;
+import classes.util.Helper;
 import classes.util.HiberSF;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +33,14 @@ public class libTerminal {
         }
     }
     static private UsersEntity currUser;
-    static private int currState;
+    static private int currState = 0;
     static private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 
     public static void startTerminal()  {
         currState = 1;
         System.out.println("Welcome to the library management terminal");
+        System.out.println("Type '?' for help or 'exit' to escape the statement");
         try{
             identify();
         } catch (NullPointerException e){
@@ -59,8 +61,6 @@ public class libTerminal {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
             }
-            if (command == null)
-                throw new NullPointerException("No command in identifying");
             if (command.contentEquals("log in")) {
                 logIn();
 
@@ -147,11 +147,11 @@ public class libTerminal {
                 if (!Assistant.phonePattern.matcher(phone).matches()) {
                     System.out.println("Invalid phone format");
                 } else {
-                    phone = "+" + phone;
+                    String sphone = "+" + phone;
                     SessionFactory sf = HiberSF.getSessionFactory();
                     Session session = sf.openSession();
                     session.beginTransaction();
-                    Query query = session.createQuery("from UsersEntity where phone = :phone").setString("phone", phone);
+                    Query query = session.createQuery("from UsersEntity where phone = :phone").setString("phone", sphone);
                     UsersEntity user = (UsersEntity) query.uniqueResult();
                     if (user != null)
                         System.out.println("User with such phone already exists!");
@@ -172,6 +172,7 @@ public class libTerminal {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
             }
+            System.out.println("Enter password again");
             String secondPassword = null;
             try{
                 secondPassword = br.readLine();
@@ -268,6 +269,7 @@ public class libTerminal {
         boolean gotcommand = false;
         System.out.println("You logged in like administrator");
         while(!gotcommand){
+            currState = 1;
             System.out.println("Enter command");
             String command = null;
             try {
@@ -277,38 +279,318 @@ public class libTerminal {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
             }
-            if (command == null)
-                throw new NullPointerException("No command in ai");
             if (command.toLowerCase().contentEquals("exit"))
                 gotcommand = true;
+            else if(command.contentEquals("?"))
+                Helper.gethelp(currState);
+            else if (command.toLowerCase().contentEquals("add a book"))
+                 addBook();
+            else if (command.toLowerCase().contentEquals("view book history"))
+                viewBookHistory();
             else if (command.toLowerCase().contentEquals("write off a book"))
                  writeOff();
             else if (command.toLowerCase().contentEquals("remove a book"))
-                ;//TODO removeBook();
+                removeBook();
             else if (command.toLowerCase().contentEquals("find a user"))
-                ;//findUser();
+                findUser();
+            else if (command.toLowerCase().contentEquals("user interface"))
+                userInterface();
             else
                 System.out.println("Incorrect command");
         }
     }
 
+    private static void findUser(){
+        System.out.println("Enter user id");
+        String userID = null;
+        try {
+            userID = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the user id in searching user");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (userID.toLowerCase().contentEquals("exit"))
+            return;
+        Long num = null;
+        try {
+            num = new Long(userID);
+        } catch (NumberFormatException e){
+            System.out.println("Incorrect user id");
+            return;
+        }
+        UsersEntity user = (new UsersManager()).getUserByID(num);
+        if (user == null){
+            System.out.println("User not found!");
+            return;
+        }
+        List<HistoryEntity> takenBooks = (new HistoryManager()).searchBooksTakenByUser(user.getUserid());
+        if (takenBooks.isEmpty()){
+            System.out.println("User "+user.getFirstname()+' '+user.getLastname()+" has no borrowed books");
+            return;
+        }
+        Map<Integer, HistoryEntity> takenBooksMap = new HashMap<Integer, HistoryEntity>();
+        Integer rownum = 0;
+        for (HistoryEntity hUnit: takenBooks){
+            rownum++;
+            takenBooksMap.put(rownum, hUnit);
+        }
+        System.out.println("User: "+user.getFirstname()+" "+user.getLastname());
+        System.out.println("Email: "+user.getEmail());
+        System.out.print("Phone: ");
+        if (user.getPhone() == null)
+            System.out.println("No phone");
+        else
+            System.out.println(user.getPhone());
+        printBorrowedBooks(takenBooksMap);
+        System.out.println("Do you want to return some of these books?");
+        boolean gotanswer = false;
+        String answer = null;
+        while (!gotanswer){
+            try {
+                answer = br.readLine().trim();
+            } catch (IOException e){
+                System.err.println("Failed to read answer in book returning");
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            if ((answer.toLowerCase().contentEquals("no"))||(answer.toLowerCase().contentEquals("exit")))
+                return;
+            else if (answer.toLowerCase().contentEquals("yes")){
+                gotanswer = true;
+            }
+            else
+                System.out.println("Incorrect command");
+        }
+        if (!gotanswer)
+            return;
+        System.out.println("Enter the number of the book in showed list");
+        String bookNum = null;
+        try {
+            bookNum = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the book number in returning book");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (userID == null)
+            throw new NullPointerException("No book number in returning book");
+        if (userID.toLowerCase().contentEquals("exit"))
+            return;
+        Integer number = null;
+        try {
+            number = new Integer(bookNum);
+        } catch (NumberFormatException e){
+            System.out.println("Incorrect hUnit number");
+            return;
+        }
+        if (!takenBooksMap.containsKey(number)){
+            System.out.println("No such record in the list");
+        }
+        else {
+            HistoryEntity record = takenBooksMap.get(number);
+            record.setIsreturned(1);
+            (new HistoryManager()).mergeByObject(record);
+            System.out.println("Book has been returned!");
+        }
+    }
+
+    private static void printBorrowedBooks(Map<Integer, HistoryEntity> takenBooksMap) {
+        System.out.println("Borrowed books:");
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        Query bookQuery = session.createQuery("from BooksEntity where bookid = :bookID");
+        Query authorQuery = session.createQuery("from AuthorsEntity where authorid = :authorid");
+        int size = takenBooksMap.size();
+        for (int i = 1; i <= size; i++){
+            System.out.println("Number: " + i);
+            HistoryEntity hUnit = takenBooksMap.get(i);
+            BooksEntity book = (BooksEntity) bookQuery.setLong("bookID", hUnit.getBookid()).uniqueResult();
+            AuthorsEntity author = (AuthorsEntity) authorQuery.setLong("authorid", book.getAuthorid()).uniqueResult();
+            System.out.println("Book \""+book.getBookname()+"\" by "+author.getAuthorname());
+            System.out.println("Was taken: "+hUnit.getDatetaken());
+
+        }
+        session.close();
+        sf.close();
+    }
+
+    private static void viewBookHistory(){
+        System.out.println("Enter books's author exactly");
+        String authorName = null;
+        try {
+            authorName = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the author in book history viewing");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (authorName == null)
+            throw new NullPointerException("No author in book history viewing");
+        if (authorName.toLowerCase().contentEquals("exit"))
+            return;
+        AuthorsEntity author = (new AuthorsManager()).GetAuthorByExactName(authorName);
+        if (author == null){
+            System.out.println("Author not found");
+            return;
+        }
+        System.out.println("Enter exact book name");
+        String bookName = null;
+        try {
+            bookName = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the book name in book history viewing");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (bookName == null)
+            throw new NullPointerException("No book name in book history viewing");
+        BooksEntity book = (new BooksManager()).getBookByExactNameAndAuthorId(bookName, author.getAuthorid());
+        if (book == null){
+            System.out.println("Book not found");
+            return;
+        }
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        Query historyQuery = session.createQuery("from HistoryEntity where bookid = :bookid order by datetaken").setLong("bookid", book.getBookid());
+        List<HistoryEntity> bookHistory = historyQuery.list();
+        Query userQuery = session.createQuery("from UsersEntity where userid = :userid");
+        for (HistoryEntity hUnit: bookHistory){
+            UsersEntity user = (UsersEntity) userQuery.setLong("userid", hUnit.getUserid()).uniqueResult();
+            System.out.println("User: "+user.getFirstname()+' '+user.getLastname());
+            System.out.println("Was taken on: " + hUnit.getDatetaken());
+            System.out.print("Was returned: ");
+            if (hUnit.getIsreturned() == 0)
+                System.out.println("No");
+            else
+                System.out.println("Yes");
+        }
+        session.close();
+        sf.close();
+    }
+
+    private static void removeBook(){
+        System.out.println("Enter books's author exactly");
+        String authorName = null;
+        try {
+            authorName = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the author in book removing");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (authorName == null)
+            throw new NullPointerException("No author in book removing");
+        if (authorName.toLowerCase().contentEquals("exit"))
+            return;
+        AuthorsEntity author = (new AuthorsManager()).GetAuthorByExactName(authorName);
+        if (author == null){
+            System.out.println("Author not found");
+            return;
+        }
+        System.out.println("Enter exact book name");
+        String bookName = null;
+        try {
+            bookName = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the book name in book removing");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (bookName == null)
+            throw new NullPointerException("No book name in book removing");
+        BooksEntity book = (new BooksManager()).getBookByExactNameAndAuthorId(bookName, author.getAuthorid());
+        if (book == null){
+            System.out.println("Book not found");
+            return;
+        }
+        (new BooksManager()).removeByObject(book);
+        System.out.println("Book was removed from stock!");
+    }
+
+    private static void addBook(){
+        System.out.println("Enter books's author exactly");
+        String authorName = null;
+        try {
+            authorName = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the author in book adding");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (authorName == null)
+            throw new NullPointerException("No author in book addition");
+        if (authorName.toLowerCase().contentEquals("exit"))
+            return;
+        AuthorsEntity author = (new AuthorsManager()).GetAuthorByExactName(authorName);
+        if (author == null){
+            System.out.println("Author not found. Create?");
+            boolean gotanswer = false;
+            String answer = null;
+            while (!gotanswer) {
+                try {
+                    answer = br.readLine().trim();
+                } catch (IOException e) {
+                    System.err.println("Failed to read the answer in author addition");
+                    System.err.println(e.getMessage());
+                    e.printStackTrace();
+                }
+                if (answer == null)
+                    throw new NullPointerException("No answer in author addition");
+                if ((answer.toLowerCase().contentEquals("exit")) || (answer.toLowerCase().contentEquals("no")))
+                    return;
+                else if (answer.toLowerCase().contentEquals("yes")) {
+                    (new AuthorsManager()).addByName(authorName);
+                    author = (new AuthorsManager()).GetAuthorByExactName(authorName);
+                    gotanswer = true;
+                }
+                else
+                    System.out.println("Incorrect command");
+            }
+            if (!gotanswer)
+                return;
+        }
+        System.out.println("Enter exact book name");
+        String bookName = null;
+        try {
+            bookName = br.readLine().trim();
+        } catch (IOException e){
+            System.err.println("Failed to read the book name in book addition");
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        if (bookName == null)
+            throw new NullPointerException("No book name in book addition");
+        BooksEntity book = (new BooksManager()).getBookByExactNameAndAuthorId(bookName, author.getAuthorid());
+        if (book == null){
+            book = new BooksEntity(bookName, author.getAuthorname());
+            (new BooksManager()).addByObject(book);
+            System.out.println("New book added!");
+        }
+        else {
+            book.setBalance(book.getBalance()+1);
+            (new BooksManager()).mergeByObject(book);
+            System.out.println("Number of such books in stock: " + book.getBalance());
+        }
+    }
+
     private static void writeOff() {
         System.out.println("Enter exact book id");
-        String number = null;
+        String bookID = null;
         try {
-            number = br.readLine().trim();
+            bookID = br.readLine().trim();
         } catch (IOException e){
             System.err.println("Failed to read the book id in writing off");
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
-        if (number == null)
+        if (bookID == null)
             throw new NullPointerException("No book id in writing off");
-        if (number.toLowerCase().contentEquals("exit"))
+        if (bookID.toLowerCase().contentEquals("exit"))
             return;
         Long num = null;
         try {
-            num = new Long(number);
+            num = new Long(bookID);
         } catch (NumberFormatException e){
             System.out.println("Incorrect book id");
             return;
@@ -343,6 +625,7 @@ public class libTerminal {
         boolean gotcommand = false;
         System.out.println("You are logged in");
         while (!gotcommand){
+            currState = 2;
             System.out.println("Enter command");
             String command = null;
             try {
@@ -356,6 +639,10 @@ public class libTerminal {
                 throw new NullPointerException("No command in ui");
             if (command.toLowerCase().contentEquals("exit"))
                 gotcommand = true;
+            else if(command.contentEquals("?"))
+                Helper.gethelp(currState);
+            else if (command.toLowerCase().contentEquals("show my pi"))
+                showPI();
             else if (command.toLowerCase().contentEquals("change user data"))
                 changeUserData();
             else if (command.toLowerCase().contentEquals("search a book"))
@@ -367,8 +654,19 @@ public class libTerminal {
         }
     }
 
+    private static void showPI() {
+        System.out.println("Your personal information:");
+        System.out.println("Name: " + currUser.getFirstname());
+        System.out.println("Surname: " + currUser.getLastname());
+        System.out.println("ID: " + currUser.getUserid());
+        System.out.println("Email: " + currUser.getEmail());
+        System.out.println("Registration date: " + currUser.getRegdate());
+        if (currUser.getPhone() != null)
+            System.out.println("Phone: " + currUser.getPhone());
+    }
+
     private static void showTakenBooks() {
-        List<HistoryEntity> history = (new HistoryManager()).searchHistoryByUsersId(currUser.getUserid());
+        List<HistoryEntity> history = (new HistoryManager()).searchBooksTakenByUser(currUser.getUserid());
         if (history.isEmpty())
             System.out.println("you have no books taken");
         else {
@@ -434,7 +732,7 @@ public class libTerminal {
         try {
             line = br.readLine().trim();
         } catch (IOException e){
-            System.err.println("Failed to read the line for book searh");
+            System.err.println("Failed to read the line for book search");
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
@@ -443,8 +741,10 @@ public class libTerminal {
         if (line.toLowerCase().contentEquals("exit"))
             return;
         List<BooksEntity> books = getBooksByLineAndCrType(line, criteriontype);
-        if (books.isEmpty())
+        if (books.isEmpty()) {
+            System.out.println("No books found");
             return;
+        }
         Map<Integer,BooksEntity> booksmap = new HashMap<Integer, BooksEntity>();
         Integer rownum = 0;
         for (BooksEntity book: books){
@@ -557,17 +857,8 @@ public class libTerminal {
                 System.out.println("No");
             else
                 System.out.println("Yes");
+            System.out.println();
         }
-        /*for (BooksEntity book: books){
-            System.out.println("Book name: " + book.getBookname());
-            AuthorsEntity author = (AuthorsEntity) query.setLong("authorid", book.getAuthorid()).uniqueResult();
-            System.out.println("Author: " + author.getAuthorname());
-            System.out.print("Available: ");
-            if (book.getBalance() == 0)
-                System.out.println("No");
-            else
-                System.out.println("Yes");
-        }*/
         session.close();
         sf.close();
     }
@@ -591,6 +882,7 @@ public class libTerminal {
     private static void changeUserData() {
         boolean gotcommand = false;
         while (!gotcommand) {
+            currState = 3;
             System.out.println("Which field do you want to change?");
             String command = null;
             try {
@@ -604,6 +896,8 @@ public class libTerminal {
                 throw new NullPointerException("No command in data changing");
             if (command.toLowerCase().contentEquals("exit"))
                 gotcommand = true;
+            else if(command.contentEquals("?"))
+                Helper.gethelp(currState);
             else if (command.toLowerCase().contentEquals("name"))
                 changename();
             else if (command.toLowerCase().contentEquals("surname"))

@@ -2,8 +2,11 @@ package classes.managers;
 
 import classes.entities.AuthorsEntity;
 import classes.util.Assistant;
+import classes.util.HiberSF;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.procedure.ProcedureCall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +40,8 @@ public class AuthorsManager extends AuthorsDao {
             return;
         }
         else {
-            Session session = GetSessionWithTransaction();
-            AuthorsEntity ent = new AuthorsEntity(name);
-            CommitTransactionCloseSession(session);
+            AuthorsEntity author = new AuthorsEntity(name);
+            addByObject(author);
         }
     }
 
@@ -70,5 +72,15 @@ public class AuthorsManager extends AuthorsDao {
         AuthorsEntity Author = (AuthorsEntity) query.uniqueResult();
         CommitTransactionCloseSession(session);
         return Author;
+    }
+
+    public AuthorsEntity GetAuthorByExactName(String name){
+        AuthorsEntity author = null;
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        ProcedureCall pc = null;
+        Query query = session.createQuery("from AuthorsEntity where (LOWER(authorname) = :name)").setString("name", name.toLowerCase());
+        author = (AuthorsEntity) query.uniqueResult();
+        return author;
     }
 }

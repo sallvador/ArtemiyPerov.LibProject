@@ -2,8 +2,10 @@ package classes.managers;
 
 import classes.entities.UsersEntity;
 import classes.util.Assistant;
+import classes.util.HiberSF;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,5 +87,14 @@ public class UsersManager extends UsersDao{
         }
         CommitTransactionCloseSession(session);
         return Users;
+    }
+
+    public UsersEntity getUserByID(long ID){
+        UsersEntity user = null;
+        SessionFactory sf = HiberSF.getSessionFactory();
+        Session session = sf.openSession();
+        Query query = session.createQuery("from UsersEntity where userid = :userid").setLong("userid", ID);
+        user = (UsersEntity) query.uniqueResult();
+        return user;
     }
 }

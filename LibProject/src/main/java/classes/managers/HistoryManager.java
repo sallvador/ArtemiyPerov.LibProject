@@ -42,10 +42,10 @@ public class HistoryManager extends HistoryDao{
         sf.close();
     }
 
-    public List<HistoryEntity> searchHistoryByUsersId(long userID){
+    public List<HistoryEntity> searchBooksTakenByUser(long userID){
         SessionFactory sf = HiberSF.getSessionFactory();
         Session session = sf.openSession();
-        Query query = session.createQuery("from HistoryEntity where userid = :userid").setLong("userid",userID);
+        Query query = session.createQuery("from HistoryEntity where userid = :userid and isreturned = 0 order by datetaken").setLong("userid",userID);
         List<HistoryEntity> history = query.list();
         return history;
     }

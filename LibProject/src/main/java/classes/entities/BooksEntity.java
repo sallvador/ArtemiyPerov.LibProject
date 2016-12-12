@@ -12,7 +12,7 @@ public class BooksEntity {
 
     private long bookid;
     private String bookname;
-    private long balance;
+    private long balance = 1;
     private long authorid;
 
     protected BooksEntity(){

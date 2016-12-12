@@ -44,7 +44,7 @@ public class UsersEntity {
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-
+        this.phone = null;
         this.regdate = new Date(Calendar.getInstance().getTime().getTime());//Time(Calendar.getInstance().getTime().getTime());
         Matcher matcher = Assistant.emailPattern.matcher(email);
         if (matcher.matches() == false){
@@ -78,7 +78,7 @@ public class UsersEntity {
             System.out.println("Wrong phone format");
             return;
         }
-        this.phone = phone;
+        this.phone = '+' + phone;
         this.password = password;
     }
 
